@@ -2,7 +2,9 @@
 
 namespace App\DataFixtures;
 
+use Faker\Factory;
 use App\Entity\User;
+use App\Entity\Client;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
@@ -19,14 +21,27 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
     public function load(ObjectManager $manager)
     {
+        $faker = Factory::create();
+        
         $user = (new User())
             ->setEmail('adrien@email.fr')
-            ->setRoles(['ROLE_VISITOR']);
+            ->setRoles(['ROLE_VISITOR', 'ROLE_ADMIN']);
 
         $user->setPassword($this->passwordHasher->hashPassword(
             $user,
             '123'
         ));
+
+        $client = (new Client())
+            ->setEmail($user->getEmail())
+            ->setWeight($faker->randomFloat(1, 50, 120))
+            ->setName($faker->name)
+            ->setAge($faker->randomNumber(2))
+            ->setNumberBeer($faker->randomNumber(2));
+        
+
+        $manager->persist($client);
+        $user->setClient($client);
 
         $manager->persist($user);
 
@@ -35,6 +50,6 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
 
     public function getOrder()
     {
-        return 4;
+        return 6;
     }
 }

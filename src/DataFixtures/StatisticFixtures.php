@@ -33,6 +33,6 @@ class StatisticFixtures extends Fixture implements OrderedFixtureInterface
 
     public function getOrder()
     {
-        return 6;
+        return 5;
     }
 }

@@ -8,3 +8,8 @@ $dark: #011d28;
 
 // the ~ allows you to reference things in node_modules
 @import "~bootstrap/scss/bootstrap";
+
+
+html, body {
+    height: 100%;
+}

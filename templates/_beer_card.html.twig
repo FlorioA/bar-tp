@@ -5,7 +5,11 @@
 				<div class="card">
 					<img src="{{ asset('build/images/biere.jpg') }}" class="card-img-top" alt="...">
 					<div class="card-body">
-						<h5 class="card-title">{{ beer.name }}</h5>
+						<h5 class="card-title d-flex justify-content-between">{{ beer.name|capitalize }}
+							<small class="text-muted">{{ beer.price }}
+								<i class="fas fa-euro-sign"></i>
+							</small>
+						</h5>
 						<p class="card-text">{{ beer.description }}</p>
 					</div>
 					<ul class="list-group list-group-flush">
@@ -29,9 +33,17 @@
 								{{ loop.first ? category.name|capitalize : category.name }}{{ not loop.last ? ', ' : '' }}
 							{% endfor %}
 						</li>
-					</ul>
+
+						{% if is_granted('ROLE_VISITOR') %}
+							<li class="list-group-item">
+								{{ render(controller('App\\Controller\\BarController:newStatistic',{
+									'id' : beer.id
+								})) }}
+							</li>
+							{% endif %}
+						</ul>
+					</div>
 				</div>
-			</div>
-		{% endfor %}
+			{% endfor %}
+		</div>
 	</div>
-</div>

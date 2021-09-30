@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\StatisticRepository;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -31,6 +32,12 @@ class Statistic
 
     /**
      * @ORM\Column(type="integer")
+     * @Assert\NotBlank
+     * @Assert\Range(
+     *      min=1, 
+     *      max=10,
+     *      notInRangeMessage = "La note doit être entre {{ min }} et {{ max }}"
+     * )
      */
     private $score;
 

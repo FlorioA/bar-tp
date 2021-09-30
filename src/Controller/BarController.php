@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Beer;
-use App\Entity\Category;
 use App\Entity\Country;
+use App\Form\ScoreType;
+use App\Entity\Category;
+use App\Entity\Statistic;
 use App\Repository\BeerRepository;
-use App\Repository\CategoryRepository;
 use App\Repository\CountryRepository;
+use App\Repository\CategoryRepository;
 use App\Repository\StatisticRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -23,12 +27,21 @@ class BarController extends AbstractController
 
     private $statisticRepo;
 
-    public function __construct(CountryRepository $countryRepo, BeerRepository $beerRepo, CategoryRepository $categoryRepo, StatisticRepository $statisticRepo)
+    private $em;
+
+    public function __construct(
+        CountryRepository $countryRepo,
+        BeerRepository $beerRepo,
+        CategoryRepository $categoryRepo,
+        StatisticRepository $statisticRepo,
+        EntityManagerInterface $em
+    )
     {
         $this->countryRepo = $countryRepo;
         $this->beerRepo = $beerRepo;
         $this->categoryRepo = $categoryRepo;
         $this->statisticRepo = $statisticRepo;
+        $this->em = $em;
     }
 
     /**
@@ -39,8 +52,11 @@ class BarController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Beer::class);
         $beers = $repository->findAll();
 
+        // $form = $this->createForm(ScoreType::class);
+
         return $this->render('bar/index.html.twig', [
-            'beers' => $beers
+            'beers' => $beers,
+            // 'formObject' => $form
         ]);
     }
 
@@ -112,6 +128,40 @@ class BarController extends AbstractController
 
         return $this->render('bar/statistics.html.twig', [
             'statistics' => $statistics
+        ]);
+    }
+
+    /**
+     * @Route("/statistic/new/{id}", name="new_statistic")
+     */
+    public function newStatistic(Beer $beer, Request $request) {
+
+        $statistic = (new Statistic())
+            ->setBeer($beer)
+            ->setClient($this->getUser()->getClient());
+
+        $form = $this->createForm(ScoreType::class, $statistic);
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted()) {
+            if ($form->isValid()) {
+                $this->em->persist($statistic);
+                $this->em->flush();
+
+                $this->addFlash('success', 'Bière notée ! GG');
+            } else {
+                $errorMessage = $form->getErrors(true)->getChildren()->getMessage();
+
+                $this->addFlash('danger', $errorMessage);
+            }
+
+            return $this->redirectToRoute('bar');
+        }
+
+        return $this->render('_score_form.html.twig', [
+            'form' => $form->createView(),
+            'beer_id' => $beer->getId()
         ]);
     }
 }

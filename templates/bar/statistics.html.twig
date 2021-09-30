@@ -4,37 +4,43 @@
 {% endblock %}
 
 {% block body %}
-    <a class="btn btn-outline-primary my-3" href="{{ path('bar') }}"><i class="fas fa-backward"></i></a>
-    <h4 class="text-center">Statistiques</h5>
+	<a class="btn btn-outline-primary my-3" href="{{ path('bar') }}">
+		<i class="fas fa-backward"></i>
+	</a>
+	<h4 class="text-center">Statistiques</h5>
 
-	<table class="table">
-		<thead>
-			<tr>
-				<th scope="col">Nom</th>
-				<th scope="col">Age</th>
-				<th scope="col">Poids</th>
-				<th scope="col">Nombre de bières</th>
-				<th scope="col">Note</th>
-				<th scope="col">Bière</th>
-				<th scope="col">Catégories</th>
-			</tr>
-		</thead>
-		<tbody>
-            {% for statistic in statistics %}
-                <tr>
-                    <td>{{ statistic.client.name }}</td>
-                    <td>{{ statistic.client.age }}</td>
-                    <td>{{ statistic.client.weight }}</td>
-                    <td>{{ statistic.client.numberBeer }}</td>
-                    <td>{{ statistic.score }}</td>
-                    <td>{{ statistic.beer.name }}</td>
-                    <td>
-                        {% for category in statistic.beer.categories %}
-                            {{ loop.first ? category.name|capitalize : category.name }}{{ not loop.last ? ', ' : '' }}
-                        {% endfor %}
-                    </td>
-                </tr>
-            {% endfor %}
-		</tbody>
-	</table>
+	<div class="card shadow-sm">
+		<div class="card-body">
+			<table class="table">
+				<thead>
+					<tr>
+						<th scope="col">Nom</th>
+						<th scope="col" class="text-end">Age</th>
+						<th scope="col" class="text-end">Poids</th>
+						<th scope="col" class="text-end">Nombre de bières</th>
+						<th scope="col" class="text-end">Note</th>
+						<th scope="col" class="text-end">Bière</th>
+						<th scope="col" class="text-end">Catégories</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for statistic in statistics %}
+						<tr>
+							<td>{{ statistic.client.name }}</td>
+							<td class="text-end">{{ statistic.client.age }}</td>
+							<td class="text-end">{{ statistic.client.weight }}</td>
+							<td class="text-end">{{ statistic.client.numberBeer }}</td>
+							<td class="text-end">{{ statistic.score }}</td>
+							<td class="text-end">{{ statistic.beer.name }}</td>
+							<td class="text-end">
+								{% for category in statistic.beer.categories %}
+									{{ loop.first ? category.name|capitalize : category.name }}{{ not loop.last ? ', ' : '' }}
+								{% endfor %}
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+	</div>
 {% endblock %}
