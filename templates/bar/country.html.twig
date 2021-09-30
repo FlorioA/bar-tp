@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello BarController!
+{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <a class="btn btn-outline-primary my-3" href="{{ path('bar') }}"><i class="fas fa-backward"></i></a>
+        <h4 class="text-center">{{ country.name|capitalize }}</h5>
+
+        {% include '_beer_card.html.twig' with beers %}
+    </div>
+{% endblock %}

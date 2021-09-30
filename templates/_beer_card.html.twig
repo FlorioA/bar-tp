@@ -1,0 +1,37 @@
+<div class="container">
+	<div class="row">
+		{% for beer in beers %}
+			<div class="col-sm-6 col-lg-4 col-xl-3 my-3">
+				<div class="card">
+					<img src="{{ asset('build/images/biere.jpg') }}" class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">{{ beer.name }}</h5>
+						<p class="card-text">{{ beer.description }}</p>
+					</div>
+					<ul class="list-group list-group-flush">
+						{% if beer.country %}
+							<li class="list-group-item">
+								<i class="far fa-flag"></i>
+								<a class="card-link" href="{{ path('country_beer', { 'id' : beer.country.id }) }}">
+									{{ beer.country.name }}
+								</a>
+							</li>
+						{% endif %}
+
+						<li class="list-group-item">
+							<i class="far fa-clock"></i>
+							{{ beer.publishedAt|format_datetime() }}
+						</li>
+
+						<li class="list-group-item">
+							<i class="far fa-sun"></i>
+							{% for category in beer.categories %}
+								{{ loop.first ? category.name|capitalize : category.name }}{{ not loop.last ? ', ' : '' }}
+							{% endfor %}
+						</li>
+					</ul>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+</div>
