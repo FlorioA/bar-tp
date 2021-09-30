@@ -20,9 +20,17 @@ class StatisticFixtures extends Fixture implements OrderedFixtureInterface
         $beers = $manager->getRepository(Beer::class)->findAll();
 
         foreach ($clients as $client) {
+            $beer = $beers[rand(0, (count($beers) - 1))];
+
+            $categories = [];
+            foreach ($beer->getCategories() as $category) {
+                $categories[] = $category->getId();
+            }
+
             $statistic = (new Statistic())
                 ->setClient($client)
-                ->setBeer($beers[rand(0, (count($beers) - 1))])
+                ->setBeer($beer)
+                ->setCategories($categories)
                 ->setScore($faker->randomDigit + 1);
 
             $manager->persist($statistic);

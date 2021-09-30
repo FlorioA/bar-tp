@@ -41,6 +41,11 @@ class Statistic
      */
     private $score;
 
+    /**
+     * @ORM\Column(type="array")
+     */
+    private $categories = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -78,6 +83,18 @@ class Statistic
     public function setScore(int $score): self
     {
         $this->score = $score;
+
+        return $this;
+    }
+
+    public function getCategories(): ?array
+    {
+        return $this->categories;
+    }
+
+    public function setCategories(array $categories): self
+    {
+        $this->categories = $categories;
 
         return $this;
     }

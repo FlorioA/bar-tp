@@ -4,5 +4,5 @@
 {% endblock %}
 
 {% block body %}
-	{{ include('_beer_card.html.twig', beers) }}
+	{% include '_beer_card.html.twig' with beers %}
 {% endblock %}

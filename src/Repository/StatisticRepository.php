@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Beer;
 use App\Entity\Statistic;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -19,32 +20,13 @@ class StatisticRepository extends ServiceEntityRepository
         parent::__construct($registry, Statistic::class);
     }
 
-    // /**
-    //  * @return Statistic[] Returns an array of Statistic objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
+    public function checkIfAlreadyScored($idBeer, $idClient) {
         return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('s.id', 'ASC')
-            ->setMaxResults(10)
+            ->andWhere('s.beer = :idBeer')
+            ->andWhere('s.client = :idClient')
+            ->setParameter('idBeer', $idBeer)
+            ->setParameter('idClient', $idClient)
             ->getQuery()
-            ->getResult()
-        ;
+            ->getOneOrNullResult();
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Statistic
-    {
-        return $this->createQueryBuilder('s')
-            ->andWhere('s.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

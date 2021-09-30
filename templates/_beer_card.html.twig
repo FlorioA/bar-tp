@@ -34,7 +34,7 @@
 							{% endfor %}
 						</li>
 
-						{% if is_granted('ROLE_VISITOR') %}
+						{% if is_granted('ROLE_VISITOR') and not check_statistic_exists(beer.id, app.user.client.id) %}
 							<li class="list-group-item">
 								{{ render(controller('App\\Controller\\BarController:newStatistic',{
 									'id' : beer.id
