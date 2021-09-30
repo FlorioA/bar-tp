@@ -8,6 +8,7 @@ use App\Entity\Country;
 use App\Repository\BeerRepository;
 use App\Repository\CategoryRepository;
 use App\Repository\CountryRepository;
+use App\Repository\StatisticRepository;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,11 +21,14 @@ class BarController extends AbstractController
 
     private $categoryRepo;
 
-    public function __construct(CountryRepository $countryRepo, BeerRepository $beerRepo, CategoryRepository $categoryRepo)
+    private $statisticRepo;
+
+    public function __construct(CountryRepository $countryRepo, BeerRepository $beerRepo, CategoryRepository $categoryRepo, StatisticRepository $statisticRepo)
     {
         $this->countryRepo = $countryRepo;
         $this->beerRepo = $beerRepo;
         $this->categoryRepo = $categoryRepo;
+        $this->statisticRepo = $statisticRepo;
     }
 
     /**
@@ -97,6 +101,17 @@ class BarController extends AbstractController
             'category_id' => $catId,
             'categories_normal' => $categoriesNormal,
             'categories_special' => $categoriesSpecial
+        ]);
+    }
+
+    /**
+     * @Route("/statistics", name="statistics")
+     */
+    public function statistics() {
+        $statistics = $this->statisticRepo->findAll();
+
+        return $this->render('bar/statistics.html.twig', [
+            'statistics' => $statistics
         ]);
     }
 }
