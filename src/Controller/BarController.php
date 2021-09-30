@@ -52,11 +52,8 @@ class BarController extends AbstractController
         $repository = $this->getDoctrine()->getRepository(Beer::class);
         $beers = $repository->findAll();
 
-        // $form = $this->createForm(ScoreType::class);
-
         return $this->render('bar/index.html.twig', [
             'beers' => $beers,
-            // 'formObject' => $form
         ]);
     }
 
@@ -71,10 +68,7 @@ class BarController extends AbstractController
         $beer->setPublishedAt(new \DateTime());
         $beer->setDescription('Ergonomic and stylish!');
 
-        // tell Doctrine you want to (eventually) save the Product (no queries yet)
         $entityManager->persist($beer);
-
-        // actually executes the queries (i.e. the INSERT query)
         $entityManager->flush();
 
         return new Response('Saved new beer with id '.$beer->getId());

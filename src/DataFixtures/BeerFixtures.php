@@ -15,21 +15,16 @@ class BeerFixtures extends Fixture implements OrderedFixtureInterface
     public function load(ObjectManager $manager)
     {
         $faker = Factory::create();
-        // on fixe le nombre de bière à insérer dans les variables d'environnements
-        $count = $_ENV["APP_FIXTURES_NB_BEERS"] ?? 20;
+        $count = 20;
 
         $countries = $manager->getRepository(Country::class)->findAll();
 
-        // cat normal
         $catNormals = $manager->getRepository(Category::class)->findByTerm('normal');
-        // de manière équivalente on peut utiliser directement avec la méthode findBy de Doctrine
-        // $manager->getRepository(Category::class)->findBy(['term' => 'normal']);
-        // cat special
         $catSpecials = $manager->getRepository(Category::class)->findByTerm('special');
         $nbSpecials = count($catSpecials);
         
         while($count > 0){
-            shuffle($countries); // mélange le tableau par référence
+            shuffle($countries);
             shuffle($catNormals);
             shuffle($catSpecials);
             $beer = new Beer();
@@ -40,7 +35,6 @@ class BeerFixtures extends Fixture implements OrderedFixtureInterface
             $beer->setCountry($countries[0]);
             $beer->addCategory($catNormals[0]);
 
-            // en ajoute de manière aléatoire
             foreach( array_slice($catSpecials, 0, rand(1, $nbSpecials)) as $catSpecial){
                 $beer->addCategory($catSpecial);
             }

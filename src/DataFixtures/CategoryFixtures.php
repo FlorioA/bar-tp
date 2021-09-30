@@ -20,7 +20,6 @@ class CategoryFixtures extends Fixture implements OrderedFixtureInterface
             $category->setName($normal);
             $category->setTerm('normal');
             $category->setDescription($faker->text());
-            // terme de la catégorie  par défaut normal
             $manager->persist($category);
         }
 
